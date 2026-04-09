@@ -1,2 +1,2 @@
 # Z_Note
-Its my note application
+Its my note application.

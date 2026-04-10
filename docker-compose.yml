@@ -1,0 +1,31 @@
+version: "3"
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: notebook_user
+      POSTGRES_PASSWORD: notebook_pass
+      POSTGRES_DB: notebook
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://notebook_user:notebook_pass@db:5432/notebook
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

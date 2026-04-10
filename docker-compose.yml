@@ -3,9 +3,9 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_USER: notebook_user
-      POSTGRES_PASSWORD: notebook_pass
-      POSTGRES_DB: notebook
+      POSTGRES_USER: Z_Note
+      POSTGRES_PASSWORD: Passw0rd
+      POSTGRES_DB: Z_Note
     ports:
       - "5432:5432"
     volumes:
@@ -16,9 +16,12 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgres://notebook_user:notebook_pass@db:5432/notebook
+      DATABASE_URL: postgres://Z_Note:Passw0rd@db:5432/Z_Note
     depends_on:
       - db
+    volumes:
+      - ./backend:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
   frontend:
     build: ./frontend
@@ -26,6 +29,9 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
 
 volumes:
   db_data:
